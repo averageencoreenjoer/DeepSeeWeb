@@ -1,15 +1,31 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, DoCheck, inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {BaseWidget} from "../app/components/widgets/base-widget.class";
 import {IAddonInfo} from "../app/services/dsw.types";
+import {buildHtmlViewerMarkup} from "../app/services/html-viewer.util";
 
 @Component({
   standalone: true,
   template: `
-    <iframe [src]="url" style="border: none; width:100%; height:100%; flex: 1 1 100%"></iframe>`
+    <div class="html-viewer" [innerHTML]="markup"></div>`,
+  styles: [`
+    :host {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .html-viewer {
+      display: flex;
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+  `]
 })
-export class HtmlViewer extends BaseWidget implements OnInit, OnDestroy {
+export class HtmlViewer extends BaseWidget implements OnInit, DoCheck, OnDestroy {
   static AddonInfo: IAddonInfo = {
     // Version of addon system, should be specified manually as number, not reference
     // version always should be equal to BaseWidget.CURRENT_ADDON_VERSION
@@ -23,25 +39,40 @@ export class HtmlViewer extends BaseWidget implements OnInit, OnDestroy {
     type: 'custom'
   };
   isSpinner = false;
-  url: SafeResourceUrl;
+  markup?: SafeHtml;
   private san = inject(DomSanitizer);
-  private subOnFilter: Subscription;
+  private subOnFilter?: Subscription;
+  private currentData = '';
+  private currentFilters = '';
 
 
   ngOnInit(): void {
-    this.url = this.san.bypassSecurityTrustResourceUrl(this.getUrl());
+    this.updateMarkup();
 
     this.subOnFilter = this.fs.onApplyFilter.subscribe(flt => {
-      this.url = this.san.bypassSecurityTrustResourceUrl(this.getUrl().replace('$$$FILTERS', encodeURIComponent(flt.value)));
+      this.updateMarkup(flt.value);
     });
   }
 
-  getUrl(): string {
+  ngDoCheck() {
+    const nextData = this.getData();
+    if (nextData !== this.currentData) {
+      this.updateMarkup(this.currentFilters);
+    }
+  }
+
+  getData(): string {
     return this.widget?.properties?.Data || '';
   }
 
+  private updateMarkup(filters = '') {
+    this.currentFilters = filters;
+    this.currentData = this.getData();
+    this.markup = this.san.bypassSecurityTrustHtml(buildHtmlViewerMarkup(this.currentData, filters));
+  }
+
   ngOnDestroy() {
-    this.subOnFilter.unsubscribe();
+    this.subOnFilter?.unsubscribe();
     super.ngOnDestroy();
   }
 }

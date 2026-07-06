@@ -1,0 +1,26 @@
+<dsw-sidebar-actions
+  [isWidgetEditorWarning]="true"
+  [isBack]="true"
+  (apply)="onSave()"
+>
+  Widget settings
+</dsw-sidebar-actions>
+
+@if (model) {
+  <div class="container">
+    <label>Data</label>
+    <textarea
+      [(ngModel)]="dataValue"
+      (ngModelChange)="onDataChange($event)"
+      spellcheck="false"
+      placeholder="Enter widget data"
+    ></textarea>
+
+    @if (isHtmlViewer()) {
+      <div class="hint">
+        HTML from this field is rendered as raw HTML. You can store full markup including
+        `iframe`.
+      </div>
+    }
+  </div>
+}

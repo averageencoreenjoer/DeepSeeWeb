@@ -76,7 +76,7 @@
   @if (ctxItem?.kpitype) {
     <div (click)="gotoKPIPage(ctxItem)">{{ 'showKPI' | i18n }}</div>
   }
-  @if (ctxItem?.dataSource) {
+  @if (canOpenAnalyzer(ctxItem)) {
     <div (click)="gotoAnalyzer(ctxItem)">{{ 'openAnalyzer' | i18n }}</div>
   }
   <div class="divider"></div>

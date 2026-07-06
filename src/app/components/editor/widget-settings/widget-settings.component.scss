@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  min-height: 220px;
+  resize: vertical;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.hint {
+  color: #5d6773;
+  font-size: 13px;
+  line-height: 1.4;
+}

@@ -22,6 +22,7 @@ import {WLightBarComponent} from '../components/widgets/light-bar/light-bar.comp
 import {WTrafficLightComponent} from '../components/widgets/traffic-light/traffic-light.component';
 import {ADDON_PREFIX, IHeaderButton, IWidgetType} from './dsw.types';
 import {MapWidgetOldComponent} from '../components/widgets/map-widget-old/map-widget.component';
+import {HtmlViewer} from '../../addons/htmlViewer';
 
 // TODO: add translation
 const btnPieChart: IHeaderButton[] = [
@@ -258,6 +259,11 @@ export const WIDGET_TYPES: { [key: string]: IWidgetType } = {
     class: WTrafficLightComponent,
     allowShowAsPivot: false
   },
+  htmlViewer: {
+    label: 'HTML viewer',
+    class: HtmlViewer,
+    allowShowAsPivot: false
+  },
   /*'dsw.addons.htmlviewer': {
       class: HtmlViewerComponent
   },*/
@@ -270,6 +276,8 @@ export const WIDGET_TYPES: { [key: string]: IWidgetType } = {
       allowShowAsPivot: true
   }*/
 };
+
+WIDGET_TYPES.htmlviewer = WIDGET_TYPES.htmlViewer;
 
 WIDGET_TYPES[dsw.const.emptyWidgetClass] = {
   class: EmptyWidgetComponent,
@@ -341,14 +349,7 @@ export class WidgetTypeService {
    * @returns {object|undefined} Class constructor function
    */
   getClass(name: string): Type<any> | undefined {
-    let key = name.toLowerCase();
-    if (!WIDGET_TYPES[key]) {
-      key = key.replace(/dsw.addons./ig, '');
-    }
-    if (!WIDGET_TYPES[key]) {
-      return;
-    }
-    return WIDGET_TYPES[key].class;
+    return this.getDesc(name)?.class;
   }
 
   /**
@@ -357,7 +358,12 @@ export class WidgetTypeService {
    * @returns {object} Type description
    */
   getDesc(name: string): IWidgetType | undefined {
-    return WIDGET_TYPES[name.replace(/dsw.addons./ig, '')];
+    const rawName = name || '';
+    const withoutPrefix = rawName.replace(/dsw.addons./ig, '');
+    return WIDGET_TYPES[rawName]
+      || WIDGET_TYPES[rawName.toLowerCase()]
+      || WIDGET_TYPES[withoutPrefix]
+      || WIDGET_TYPES[withoutPrefix.toLowerCase()];
   }
 
   /**

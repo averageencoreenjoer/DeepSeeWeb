@@ -18,28 +18,32 @@
       [closeOnSelect]="true"
       (change)="onTypeChange()"
     ></ng-select>
-    <!-- Data source -->
-    <label>Data source</label>
-    <dsw-input
-      [required]="invalid.includes('datasource')"
-      [(ngModel)]="model.dataSource"
-      [chooseButton]="true"
-      (keydown.enter)="onDatasourceChanged()"
-      (choose)="onSelectDataSource()"
-    ></dsw-input>
-    <!-- Reference to -->
-    <label>Reference to</label>
-    <ng-select
-      class="dsw"
-      [items]="widgetList"
-      [(ngModel)]="model.dataLink"
-      bindLabel="label"
-      bindValue="name"
-      [clearable]="false"
-      [closeOnSelect]="true"
-      (change)="onLinkChange()"
-    >
-    </ng-select>
+    @if (!isHtmlViewerSelected()) {
+      <label>Data source</label>
+      <dsw-input
+        [required]="invalid.includes('datasource')"
+        [(ngModel)]="model.dataSource"
+        [chooseButton]="true"
+        (keydown.enter)="onDatasourceChanged()"
+        (choose)="onSelectDataSource()"
+      ></dsw-input>
+      <label>Reference to</label>
+      <ng-select
+        class="dsw"
+        [items]="widgetList"
+        [(ngModel)]="model.dataLink"
+        bindLabel="label"
+        bindValue="name"
+        [clearable]="false"
+        [closeOnSelect]="true"
+        (change)="onLinkChange()"
+      >
+      </ng-select>
+    } @else {
+      <div class="field-note">
+        HTML viewer does not require a data source. Fill HTML content in Widget settings -> Data.
+      </div>
+    }
     <!-- Target details -->
     <!-- <label>Target details</label>
     <input class="select">-->

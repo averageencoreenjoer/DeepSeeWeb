@@ -24,6 +24,7 @@ import {ExportingOptions} from 'highcharts';
 import {WTextComponent} from '../../widgets/text/wtext.component';
 import {BaseChartClass} from '../../widgets/charts/base-chart.class';
 import {DashboardEditingClass} from './dashboard-editing.class';
+import {buildHtmlViewerMarkup, isHtmlViewerType} from '../../../services/html-viewer.util';
 import {I18nPipe} from '../../../services/i18n.service';
 import {WidgetComponent} from '../../widgets/base/widget/widget.component';
 import {IWidgetDesc} from "../../../services/dsw.types";
@@ -796,6 +797,10 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
   }
 
   gotoAnalyzer(w?: IWidgetDesc) {
+    if (isHtmlViewerType(w?.type)) {
+      this.openHtmlViewerAnalyzer(w);
+      return;
+    }
     if (!w?.dataSource) {
       return;
     }
@@ -807,6 +812,10 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
       url += '&FILTERSTATE=' + filters;
     }
     window.open(url, '_blank');
+  }
+
+  canOpenAnalyzer(w?: IWidgetDesc): boolean {
+    return !!w?.dataSource || isHtmlViewerType(w?.type);
   }
 
   ctxEdit() {
@@ -897,6 +906,49 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
         }, 10);
       }
     }
+  }
+
+  private openHtmlViewerAnalyzer(w?: IWidgetDesc) {
+    const html = buildHtmlViewerMarkup(
+      w?.properties?.Data || '',
+      this.fs.getFiltersUrlString(w?.name || '', false, '\t', '\n')
+    );
+    if (!html) {
+      return;
+    }
+    const analyzerWindow = window.open('', '_blank');
+    if (!analyzerWindow) {
+      return;
+    }
+    analyzerWindow.document.open();
+    analyzerWindow.document.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    iframe {
+      border: 0;
+      width: 100%;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>${html}</body>
+</html>`);
+    analyzerWindow.document.close();
+    this.hideContextMenu();
   }
 
   private fitEmptyWidget() {

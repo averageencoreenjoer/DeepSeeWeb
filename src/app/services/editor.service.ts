@@ -7,6 +7,7 @@ import {BehaviorSubject} from "rxjs";
 import {BroadcastService} from "./broadcast.service";
 import {ErrorService} from "./error.service";
 import {IWidgetDesc} from "./dsw.types";
+import {isHtmlViewerType} from "./html-viewer.util";
 
 export interface IWidgetListItem {
   label: string;
@@ -178,7 +179,7 @@ export class EditorService {
       });
       return;
     }
-    if (!widget.dataSource && !widget.dataLink) {
+    if (!widget.dataSource && !widget.dataLink && !isHtmlViewerType(widget.type)) {
       this.es.show('Please choose "Data source" or "Reference to"', true);
       this.navigateDataSourceAndType(widget, ['datasource']);
       return;

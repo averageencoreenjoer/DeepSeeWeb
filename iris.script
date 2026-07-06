@@ -14,7 +14,8 @@
 
     // Install samples BI
     zn "IRISAPP"
-    zpm "install samples-bi"
+    zpm "load /home/irisowner/irisdev/.deps/Cache-MDX2JSON -v"
+    zpm "load /home/irisowner/irisdev/.deps/Samples-BI -v"
 
     // load all the code of the project as a ZPM package
     zn "IRISAPP"

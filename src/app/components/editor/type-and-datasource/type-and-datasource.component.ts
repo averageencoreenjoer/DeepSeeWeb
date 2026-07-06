@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {ModalService} from "../../../services/modal.service";
 import {IDataSourceInfo} from "../datasource-selector-dialog/datasource-selector-dialog";
 import {DashboardService} from "../../../services/dashboard.service";
@@ -10,6 +10,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
 
 import {SidebarActionsComponent} from "../../ui/sidebar-actions/sidebar-actions.component";
 import {IWidgetDesc} from "../../../services/dsw.types";
+import {isHtmlViewerType} from "../../../services/html-viewer.util";
 
 @Component({
   selector: 'dsw-type-and-ds',
@@ -23,7 +24,7 @@ import {IWidgetDesc} from "../../../services/dsw.types";
     InputComponent
   ],
 })
-export class TypeAndDatasourceComponent implements OnInit, OnDestroy {
+export class TypeAndDatasourceComponent implements OnInit {
   @Input() model?: IWidgetDesc;
   @Input() invalid: string[] = [];
   widgetList: IWidgetListItem[] = [];
@@ -51,6 +52,7 @@ export class TypeAndDatasourceComponent implements OnInit, OnDestroy {
     WIDGET_TYPES.regular,
     WIDGET_TYPES.textMeter,
     WIDGET_TYPES.map,
+    WIDGET_TYPES.htmlViewer,
   ];
   type: any;
 
@@ -86,10 +88,6 @@ export class TypeAndDatasourceComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.eds.cancelEditing();
-  }
-
   onTypeChange() {
     if (!this.model) {
       return;
@@ -123,5 +121,9 @@ export class TypeAndDatasourceComponent implements OnInit, OnDestroy {
       return;
     }
     this.eds.save(this.model);
+  }
+
+  isHtmlViewerSelected(): boolean {
+    return isHtmlViewerType(this.model?.type);
   }
 }
