@@ -26,7 +26,7 @@ Use this when the widget is fully static or when the payload is built with runti
 Example URL payload:
 
 ```text
-[url]/csp/irisapp/App.BI.HtmlViewerDemo.HelloPage.cls?title=Hello%20from%20dashboard
+[url]/csp/app/MyEmbeddedPage.cls?title=Hello%20from%20dashboard
 ```
 
 Example HTML payload:
@@ -88,7 +88,7 @@ Use URL mode for:
 Example:
 
 ```text
-[url]/csp/irisapp/App.BI.HtmlViewerDemo.HelloPage.cls?title=Hello%20from%20iframe
+[url]/csp/app/MyEmbeddedPage.cls?title=Hello%20from%20iframe
 ```
 
 ## HTML mode
@@ -121,25 +121,6 @@ In the DSW editor:
 * `Data source` stays empty because the viewer itself does not execute MDX
 
 In the legacy IRIS dashboard editor, custom addon properties such as `Data` are not exposed well. For direct mode, prefer the DSW editor or edit dashboard XML directly.
-
-## Demo assets in this repository
-
-BI classes:
-* [bi/IRISAPP/App/BI/HtmlViewerDemo/Cube.cls](/Users/test/DeepSeeWeb/bi/IRISAPP/App/BI/HtmlViewerDemo/Cube.cls)
-* [bi/IRISAPP/App/BI/HtmlViewerDemo/Setup.cls](/Users/test/DeepSeeWeb/bi/IRISAPP/App/BI/HtmlViewerDemo/Setup.cls)
-* [bi/IRISAPP/App/BI/HtmlViewerDemo/HelloPage.cls](/Users/test/DeepSeeWeb/bi/IRISAPP/App/BI/HtmlViewerDemo/HelloPage.cls)
-
-Pivot and dashboard demos:
-* [bi/IRISAPP/dfi/HTML Viewer Demo/Hello Links.pivot.xml](/Users/test/DeepSeeWeb/bi/IRISAPP/dfi/HTML%20Viewer%20Demo/Hello%20Links.pivot.xml)
-* [bi/IRISAPP/dfi/HTML Viewer Demo/Hello HTML.pivot.xml](/Users/test/DeepSeeWeb/bi/IRISAPP/dfi/HTML%20Viewer%20Demo/Hello%20HTML.pivot.xml)
-* [bi/IRISAPP/dfi/HTML Viewer Final Demo.dashboard.xml](/Users/test/DeepSeeWeb/bi/IRISAPP/dfi/HTML%20Viewer%20Final%20Demo.dashboard.xml)
-
-Bootstrap script:
-* [scripts/import-html-viewer-final-demo.sh](/Users/test/DeepSeeWeb/scripts/import-html-viewer-final-demo.sh)
-
-The final demo dashboard shows both linked modes:
-* `Hello Links Pivot` -> `Linked URL HTML Viewer Widget`
-* `Hello HTML Pivot` -> `Linked HTML Snippet Viewer Widget`
 
 ## Minimal BI recipe
 
