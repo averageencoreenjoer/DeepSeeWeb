@@ -51,6 +51,6 @@ Thumbs.db
 /e2e/screenshots
 
 # local BI/demo assets
-/.deps/iris-bi-utils/
+/.deps/
 /bi/IRISAPP/
 /scripts/

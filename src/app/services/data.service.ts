@@ -380,10 +380,7 @@ export class DataService {
    */
   async loadAddons() {
     return firstValueFrom(
-      this.http.get<string[]>(
-        this.url + 'Addons?Namespace=' + encodeURIComponent(CURRENT_NAMESPACE || NAMESPACE),
-        this.withCredentialsHeaders
-      )
+      this.http.get<string[]>(this.url + 'Addons', this.withCredentialsHeaders)
     );
   }
 

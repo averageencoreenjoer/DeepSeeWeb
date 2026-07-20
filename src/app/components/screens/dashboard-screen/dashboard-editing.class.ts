@@ -10,7 +10,6 @@ import {DashboardService} from "../../../services/dashboard.service";
 import {ActivatedRoute} from "@angular/router";
 import {I18nService} from "../../../services/i18n.service";
 import {NamespaceService} from "../../../services/namespace.service";
-import {WidgetTypeService} from "../../../services/widget-type.service";
 import {
   ChangeDetectorRef,
   Component,
@@ -58,7 +57,6 @@ export class DashboardEditingClass implements OnDestroy {
   protected vs = inject(VariablesService);
   protected i18n = inject(I18nService);
   protected es = inject(ErrorService);
-  protected wts = inject(WidgetTypeService);
 
   // On edited widget changed
   private subOnEditedWidgetChanged = this.eds.onEditedWidgetChanged.pipe(takeUntilDestroyed());

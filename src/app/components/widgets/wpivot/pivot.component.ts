@@ -168,6 +168,7 @@ export class WPivotComponent extends BaseWidget {
     const originalDataIsChanged = lpt.dataIsChanged?.bind(lpt);
     lpt.dataIsChanged = () => {
       originalDataIsChanged?.();
+      // Linked viewers subscribe to the source widget name, so rebroadcast the current pivot payload after each refresh/drill.
       this.broadcastLinkedWidgetData();
     };
   }

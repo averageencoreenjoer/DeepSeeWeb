@@ -1232,7 +1232,6 @@ export class BaseWidget implements OnInit, OnDestroy {
         this.removeColsThatNotExistInDataProperties(data);
         this._currentData = data;
         this.retrieveData(data);
-        this.bs.broadcast('setLinkedWidgetData:' + this.widget.name, data);
       })
       .catch((e) => this._onRequestError(e))
       .finally(() => {
@@ -1971,36 +1970,14 @@ export class BaseWidget implements OnInit, OnDestroy {
       return;
     }
 
-    const widgets = this.dbs.getAllWidgets();
-    const link = widgets.find(w => w.name === this.widget.dataLink);
-    if (link?.mdx) {
-      this.linkedMdx = link.mdx;
-      this.widget.linkedMdx = link.mdx;
-    } else if (link?.dataSource) {
-      void this.ds.getPivotData(link.dataSource)
-        .then(data => {
-          const mdx = data?.mdx || '';
-          if (!mdx) {
-            return;
-          }
-
-          link.mdx = mdx;
-          this.linkedMdx = mdx;
-          this.widget.linkedMdx = mdx;
-          this.requestData();
-        })
-        .catch(() => {
-          // Source widget can be imported without inline MDX. Ignore here and let normal error flow handle real requests.
-        });
-    }
-
     if (this.widget.shared || this.widget.inline || this.widget.edKey) {
-      return;
+      const widgets = this.dbs.getAllWidgets();
+      const link = widgets.find(w => w.name === this.widget.dataLink);
+      if (link) {
+        this.linkedMdx = link.mdx;
+      }
     } else {
       this.subLinkedMdx = this.bs.subscribe('setLinkedMDX:' + this.widget.name, (mdx: string) => this.onSetLinkedMdx(mdx));
-      if (this.widget.dataLink) {
-        setTimeout(() => this.bs.broadcast('refresh:' + this.widget.dataLink), 0);
-      }
     }
   }
 

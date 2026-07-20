@@ -46,6 +46,7 @@ function resolveHtmlViewerSource(source: string, context: IHtmlViewerContext): s
   if (prepared.trim()) {
     return prepared;
   }
+  // Linked mode reuses tuple members from the source widget when htmlViewer has no own Data payload.
   const linkedWidgetSource = extractLinkedWidgetSource(context.widgetData);
   if (linkedWidgetSource) {
     return linkedWidgetSource;
@@ -132,6 +133,7 @@ function parseRenderableSource(value: string): { type: 'html' | 'url'; value: st
     return null;
   }
 
+  // [url] is an explicit override for values that should be rendered in an iframe even if they do not look like HTML.
   const urlMarkerMatch = trimmed.match(/^\[url]\s*(.+)$/i);
   if (urlMarkerMatch?.[1]?.trim()) {
     return {
