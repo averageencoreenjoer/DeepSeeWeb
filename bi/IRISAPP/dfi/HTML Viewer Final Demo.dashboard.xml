@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache">
+<Document name="HTML Viewer Final Demo.dashboard.DFI">
+<dashboard xmlns="http://www.intersystems.com/deepsee/library" name="HTML Viewer Final Demo" folderName="" title="" description="Demo dashboard for htmlViewer linked payload rendering from two pivots: [url] members render as iframe sources, raw HTML members render as markup." keywords="HtmlViewerDemo,htmlViewer,pivot" owner="" shared="true" public="true" locked="false" resource="" timeCreated="2026-07-17T00:00:00.000Z" createdBy="" category="" bookCover="" scheme="" worklistCount="2" snapTo="true" snapGrid="true" gridRows="8" gridCols="12" canResize="true" canModify="true" showTitleBar="true" titleBarOpacity="" titleBarColor="" selectedTitleBarOpacity="" selectedTitleBarColor="" titleBarTextColor="" selectedTitleBarTextColor="" titleBarFont="" companyName="" companyLogo="" companyStyle="" backgroundColor="white" backgroundImage="none" backgroundRepeat="no-repeat" backgroundSize="100% 100%" backgroundOpacity="1" widgetBorders="1px solid #F0F0F0" widgetBordersSwitch="edit" widgetBordersColor="#F0F0F0" widgetBordersStyle="solid" widgetBordersWidth="1" widgetBordersToggle="true">
+  <widget name="Hello Links Pivot" type="pivot" subtype="pivot" subtypeClass="" title="Hello Links Pivot" dataSource="HTML Viewer Demo/Hello Links.pivot" dataLink="" drillDownDataSource="" top="0" left="0" width="6" height="4" sidebarContent="This pivot exposes [url]... members from App.BI.HtmlViewerDemo.Record.Url. The linked htmlViewer reads that payload and renders it as an iframe source." showSidebar="true" sidebarWidth="" maximized="false" homeRowL="0" homeColL="0" colSpanL="6" rowSpanL="4" showToolbar="true" showToolbarBottomBorder="true" showToolbarOnlyWhenMaximized="false" colorToolbar="#F0F0F0" opacityToolbar="1" backgroundColor="#F0F0F0" opacity="1" theme="" dataColorList="">
+    <control name="" action="showListing" target="" targetProperty="" location="widget" type="auto" controlClass="" label="" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="">
+      <valueRequired>false</valueRequired>
+    </control>
+    <property name="analyzer">1</property>
+    <property name="excel">1</property>
+    <property name="pivotSelect"></property>
+    <property name="print">1</property>
+    <property name="showDimensions">1</property>
+    <property name="title"></property>
+  </widget>
+  <widget name="Linked URL HTML Viewer Widget" type="pivot" subtype="DSW.Addons.htmlViewer" subtypeClass="" title="Linked URL HTML Viewer Widget" dataSource="" dataLink="Hello Links Pivot" drillDownDataSource="" top="0" left="6" width="6" height="4" sidebarContent="This htmlViewer is linked to Hello Links Pivot and renders the first [url]... payload it receives from the pivot." showSidebar="true" sidebarWidth="" maximized="false" homeRowL="0" homeColL="6" colSpanL="6" rowSpanL="4" showToolbar="true" showToolbarBottomBorder="true" showToolbarOnlyWhenMaximized="false" colorToolbar="#F0F0F0" opacityToolbar="1" backgroundColor="#F0F0F0" opacity="1" theme="" dataColorList="">
+    <property name="Data"></property>
+  </widget>
+  <widget name="Hello HTML Pivot" type="pivot" subtype="pivot" subtypeClass="" title="Hello HTML Pivot" dataSource="HTML Viewer Demo/Hello HTML.pivot" dataLink="" drillDownDataSource="" top="4" left="0" width="6" height="4" sidebarContent="This pivot exposes raw HTML members from App.BI.HtmlViewerDemo.Record.HtmlSnippet. The linked htmlViewer renders them as markup because they do not start with [url]." showSidebar="true" sidebarWidth="" maximized="false" homeRowL="4" homeColL="0" colSpanL="6" rowSpanL="4" showToolbar="true" showToolbarBottomBorder="true" showToolbarOnlyWhenMaximized="false" colorToolbar="#F0F0F0" opacityToolbar="1" backgroundColor="#F0F0F0" opacity="1" theme="" dataColorList="">
+    <control name="" action="showListing" target="" targetProperty="" location="widget" type="auto" controlClass="" label="" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="">
+      <valueRequired>false</valueRequired>
+    </control>
+    <property name="analyzer">1</property>
+    <property name="excel">1</property>
+    <property name="pivotSelect"></property>
+    <property name="print">1</property>
+    <property name="showDimensions">1</property>
+    <property name="title"></property>
+  </widget>
+  <widget name="Linked HTML Snippet Viewer Widget" type="pivot" subtype="DSW.Addons.htmlViewer" subtypeClass="" title="Linked HTML Snippet Viewer Widget" dataSource="" dataLink="Hello HTML Pivot" drillDownDataSource="" top="4" left="6" width="6" height="4" sidebarContent="This htmlViewer is linked to Hello HTML Pivot and renders the first raw HTML payload it receives from the pivot." showSidebar="true" sidebarWidth="" maximized="false" homeRowL="4" homeColL="6" colSpanL="6" rowSpanL="4" showToolbar="true" showToolbarBottomBorder="true" showToolbarOnlyWhenMaximized="false" colorToolbar="#F0F0F0" opacityToolbar="1" backgroundColor="#F0F0F0" opacity="1" theme="" dataColorList="">
+    <property name="Data"></property>
+  </widget>
+</dashboard>
+</Document></Export>

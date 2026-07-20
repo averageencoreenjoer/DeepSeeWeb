@@ -145,8 +145,7 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
   }
 
   get canEdit() {
-    // Currently for dev mode only
-    return location.port === '4007';
+    return !this.us.isEmbedded();
   }
 
   trackByName = (index: number, w: IWidgetDesc) => {
@@ -797,7 +796,7 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
   }
 
   gotoAnalyzer(w?: IWidgetDesc) {
-    if (isHtmlViewerType(w?.type)) {
+    if (isHtmlViewerType(this.wts.getWidgetTypeName(w))) {
       this.openHtmlViewerAnalyzer(w);
       return;
     }
@@ -815,7 +814,7 @@ export class DashboardScreenComponent extends DashboardEditingClass implements O
   }
 
   canOpenAnalyzer(w?: IWidgetDesc): boolean {
-    return !!w?.dataSource || isHtmlViewerType(w?.type);
+    return !!w?.dataSource || isHtmlViewerType(this.wts.getWidgetTypeName(w));
   }
 
   ctxEdit() {

@@ -80,8 +80,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get canEdit() {
-    // Currently for dev mode only
-    return location.port === '4007';
+    return !this.us.isEmbedded();
   }
 
   static processPath(path: string[], p: string, idx: number) {

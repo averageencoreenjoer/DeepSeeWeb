@@ -124,6 +124,20 @@ This features will be implemented soon and are to be included in RC
 zpm "install dsw"
 ```
 
+# HTML web view
+`HTML web view` is the built-in `DSW.Addons.htmlViewer` widget type. It can render:
+* raw HTML passed directly in widget `Data`
+* iframe/page URLs passed directly in widget `Data`
+* linked payloads coming from another widget, typically a pivot
+
+The recommended BI flow for production dashboards is:
+1. Store the render payload in cube source data.
+2. Expose it via a pivot dimension/member.
+3. Link an `HTML web view` widget to that pivot with `Reference to`.
+4. Return either raw HTML or `[url]...` payloads from the cube.
+
+Detailed setup notes, payload rules and demo assets are documented in [docs/html-web-view.md](docs/html-web-view.md).
+
 # Configuring endpoints 
 You can set your endpoint and namespace in an appropriate file config.json located in the root directory
 
@@ -394,5 +408,4 @@ At least NodeJS v16.14.0 required to build application.
 
 # Article and discussion around DeepSee Web
 Here is the [article on InterSystems Developer Community](https://community.intersystems.com/post/deepsee-web-intersystems-analytics-visualization-angularjs-part-1) describing DSW features and capabilites.
-
 

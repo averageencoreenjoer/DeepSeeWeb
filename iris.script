@@ -20,4 +20,13 @@
     // load all the code of the project as a ZPM package
     zn "IRISAPP"
     zpm "load /home/irisowner/irisdev/ -v":1:1
+
+    // Load iris-bi-utils and restore exported BI artefacts from the repo
+    set sc = $System.OBJ.LoadDir("/home/irisowner/irisdev/.deps/iris-bi-utils/src/BIInstruments","ck",1)
+    do:$SYSTEM.Status.IsError(sc) $SYSTEM.Status.DisplayError(sc)
+    set biDir = "/home/irisowner/irisdev/bi/IRISAPP/"
+    do ##class(BIInstruments.utils).workdir(biDir)
+    if ##class(%File).DirectoryExists(biDir) {
+        do ##class(BIInstruments.import).import("*.*","cku-d",.err,1,.loaded,1)
+    }
     halt

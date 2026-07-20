@@ -158,6 +158,35 @@ Server response will be ignored and local definition is to be used for addon loa
 ### 7. Sample code
 There are two real addons that used on some environments:
 1. "Word Map", addon uses Highcharts map to display map, instead of default OSM: `./src/addons/worldMap.ts`
-2. "Html viewer", addon displays html pages by url passed in widget `Data` (`properties.Data`) field: `./src/addons/htmlViewer.ts` 
+2. "Html viewer", addon renders raw HTML, iframe/page URLs and linked pivot payloads. It can read direct widget `Data` (`properties.Data`) or data received through `Reference to` from another widget: `./src/addons/htmlViewer.ts`
+
+### 7.1. Html viewer usage
+`DSW.Addons.htmlViewer` is exposed in the editor as `HTML web view`.
+
+The widget supports two payload modes:
+1. URL mode
+   Use `[url]...` to force iframe rendering. Example:
+   ```text
+   [url]/csp/irisapp/MyApp.Page.cls?id=42
+   ```
+   Without `[url]`, the viewer still auto-detects common URL forms such as `http://`, `https://`, `data:`, `/csp/` and `csp/`.
+2. HTML mode
+   Pass raw markup and the widget will render it directly. Example:
+   ```html
+   <div style="padding:16px"><h2>Hello</h2><p>Rendered as raw HTML.</p></div>
+   ```
+
+Payload source priority:
+1. `Widget settings -> Data` (`properties.Data`)
+2. Linked payload received from another widget through `Reference to`
+
+Recommended IRIS BI flow:
+1. Store URL or HTML payload in cube source fields.
+2. Publish these fields through cube dimensions or members used by a pivot.
+3. Create a pivot widget that returns those values.
+4. Create an `HTML web view` widget and set `Reference to` to that pivot.
+5. The viewer will render `[url]...` as iframe content and raw HTML as inline content.
+
+The full walkthrough and demo asset list are documented in [docs/html-web-view.md](docs/html-web-view.md).
 
  

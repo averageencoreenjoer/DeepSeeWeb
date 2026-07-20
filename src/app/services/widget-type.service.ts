@@ -20,9 +20,10 @@ import {ScorecardWidgetComponent} from '../components/widgets/scorecard/scorecar
 import {WSmileyComponent} from '../components/widgets/smiley/smiley.component';
 import {WLightBarComponent} from '../components/widgets/light-bar/light-bar.component';
 import {WTrafficLightComponent} from '../components/widgets/traffic-light/traffic-light.component';
-import {ADDON_PREFIX, IHeaderButton, IWidgetType} from './dsw.types';
+import {ADDON_PREFIX, IHeaderButton, IWidgetDesc, IWidgetType} from './dsw.types';
 import {MapWidgetOldComponent} from '../components/widgets/map-widget-old/map-widget.component';
 import {HtmlViewer} from '../../addons/htmlViewer';
+import {isHtmlViewerType} from './html-viewer.util';
 
 // TODO: add translation
 const btnPieChart: IHeaderButton[] = [
@@ -260,7 +261,7 @@ export const WIDGET_TYPES: { [key: string]: IWidgetType } = {
     allowShowAsPivot: false
   },
   htmlViewer: {
-    label: 'HTML viewer',
+    label: 'HTML web view',
     class: HtmlViewer,
     allowShowAsPivot: false
   },
@@ -283,6 +284,16 @@ WIDGET_TYPES[dsw.const.emptyWidgetClass] = {
   class: EmptyWidgetComponent,
   type: 'empty'
 };
+
+const HTML_VIEWER_SUBTYPE = 'DSW.Addons.htmlViewer';
+const METER_WIDGET_KEYS = new Set([
+  'fuelGauge',
+  'speedometer',
+  'textMeter',
+  'lightBar',
+  'trafficLight',
+  'smiley'
+]);
 
 @Injectable({
   providedIn: 'root'
@@ -364,6 +375,94 @@ export class WidgetTypeService {
       || WIDGET_TYPES[rawName.toLowerCase()]
       || WIDGET_TYPES[withoutPrefix]
       || WIDGET_TYPES[withoutPrefix.toLowerCase()];
+  }
+
+  getWidgetTypeName(widget?: Partial<IWidgetDesc>): string {
+    const subtype = widget?.subtype || '';
+    if (subtype && this.getDesc(subtype)) {
+      return subtype;
+    }
+    return widget?.type || '';
+  }
+
+  getWidgetDesc(widget?: Partial<IWidgetDesc>): IWidgetType | undefined {
+    return this.getDesc(this.getWidgetTypeName(widget));
+  }
+
+  getWidgetSelection(widget?: Partial<IWidgetDesc>): IWidgetType | undefined {
+    const type = widget?.type || '';
+    const subtype = widget?.subtype || '';
+
+    if (isHtmlViewerType(subtype) || isHtmlViewerType(type)) {
+      return WIDGET_TYPES.htmlViewer;
+    }
+
+    if (type === 'scoreCardWidget' && subtype === 'regular') {
+      return WIDGET_TYPES.regular;
+    }
+
+    if (type === 'map') {
+      return WIDGET_TYPES.map;
+    }
+
+    if (type === 'meter' && subtype) {
+      return this.getDesc(subtype);
+    }
+
+    if (type === 'pivot') {
+      if (!subtype || subtype === 'pivot') {
+        return WIDGET_TYPES.pivot;
+      }
+      return this.getDesc(subtype);
+    }
+
+    return this.getWidgetDesc(widget);
+  }
+
+  applyWidgetSelection(widget: Partial<IWidgetDesc>, selected?: IWidgetType): void {
+    const key = this.getWidgetSelectionKey(selected);
+    if (!key) {
+      return;
+    }
+
+    if (key === 'htmlViewer') {
+      widget.type = 'pivot';
+      widget.subtype = HTML_VIEWER_SUBTYPE;
+      return;
+    }
+
+    if (key === 'pivot') {
+      widget.type = 'pivot';
+      widget.subtype = 'pivot';
+      return;
+    }
+
+    if (key === 'regular') {
+      widget.type = 'scoreCardWidget';
+      widget.subtype = 'regular';
+      return;
+    }
+
+    if (key === 'map') {
+      widget.type = 'map';
+      widget.subtype = '';
+      return;
+    }
+
+    if (METER_WIDGET_KEYS.has(key)) {
+      widget.type = 'meter';
+      widget.subtype = key;
+      return;
+    }
+
+    widget.type = 'pivot';
+    widget.subtype = key;
+  }
+
+  private getWidgetSelectionKey(selected?: IWidgetType): string {
+    return Object.entries(WIDGET_TYPES).find(([key, value]) => {
+      return value === selected && key !== key.toLowerCase();
+    })?.[0] || '';
   }
 
   /**

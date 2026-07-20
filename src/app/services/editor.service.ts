@@ -8,6 +8,7 @@ import {BroadcastService} from "./broadcast.service";
 import {ErrorService} from "./error.service";
 import {IWidgetDesc} from "./dsw.types";
 import {isHtmlViewerType} from "./html-viewer.util";
+import {WidgetTypeService} from "./widget-type.service";
 
 export interface IWidgetListItem {
   label: string;
@@ -36,7 +37,8 @@ export class EditorService {
               private sbs: SidebarService,
               private bs: BroadcastService,
               private es: ErrorService,
-              private ds: DataService) {
+              private ds: DataService,
+              private wts: WidgetTypeService) {
   }
 
   resetSavedState() {
@@ -179,7 +181,7 @@ export class EditorService {
       });
       return;
     }
-    if (!widget.dataSource && !widget.dataLink && !isHtmlViewerType(widget.type)) {
+    if (!widget.dataSource && !widget.dataLink && !isHtmlViewerType(this.wts.getWidgetTypeName(widget))) {
       this.es.show('Please choose "Data source" or "Reference to"', true);
       this.navigateDataSourceAndType(widget, ['datasource']);
       return;

@@ -27,23 +27,25 @@
         (keydown.enter)="onDatasourceChanged()"
         (choose)="onSelectDataSource()"
       ></dsw-input>
-      <label>Reference to</label>
-      <ng-select
-        class="dsw"
-        [items]="widgetList"
-        [(ngModel)]="model.dataLink"
-        bindLabel="label"
-        bindValue="name"
-        [clearable]="false"
-        [closeOnSelect]="true"
-        (change)="onLinkChange()"
-      >
-      </ng-select>
     } @else {
       <div class="field-note">
-        HTML viewer does not require a data source. Fill HTML content in Widget settings -> Data.
+        HTML web view does not use an MDX data source. Use Widget settings -> Data for direct
+        HTML/URL, or configure Reference to for linked payloads from a pivot widget.
       </div>
     }
+
+    <label>Reference to</label>
+    <ng-select
+      class="dsw"
+      [items]="widgetList"
+      [(ngModel)]="model.dataLink"
+      bindLabel="label"
+      bindValue="name"
+      [clearable]="false"
+      [closeOnSelect]="true"
+      (change)="onLinkChange()"
+    >
+    </ng-select>
     <!-- Target details -->
     <!-- <label>Target details</label>
     <input class="select">-->

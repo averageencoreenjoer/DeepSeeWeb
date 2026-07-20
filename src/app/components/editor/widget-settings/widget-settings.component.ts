@@ -4,6 +4,7 @@ import {SidebarActionsComponent} from '../../ui/sidebar-actions/sidebar-actions.
 import {IWidgetDesc} from '../../../services/dsw.types';
 import {EditorService} from '../../../services/editor.service';
 import {isHtmlViewerType} from '../../../services/html-viewer.util';
+import {WidgetTypeService} from '../../../services/widget-type.service';
 
 @Component({
   selector: 'dsw-widget-settings',
@@ -16,7 +17,8 @@ export class WidgetSettingsComponent implements OnInit {
   @Input() model?: Partial<IWidgetDesc>;
   dataValue = '';
 
-  constructor(private eds: EditorService) {
+  constructor(private eds: EditorService,
+              private wts: WidgetTypeService) {
   }
 
   ngOnInit() {
@@ -25,7 +27,7 @@ export class WidgetSettingsComponent implements OnInit {
   }
 
   isHtmlViewer(): boolean {
-    return isHtmlViewerType(this.model?.type);
+    return isHtmlViewerType(this.wts.getWidgetTypeName(this.model));
   }
 
   onDataChange(value: string) {

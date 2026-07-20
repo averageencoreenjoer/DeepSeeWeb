@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from "@angular/core";
 import {ModalService} from "../../../services/modal.service";
 import {IDataSourceInfo} from "../datasource-selector-dialog/datasource-selector-dialog";
 import {DashboardService} from "../../../services/dashboard.service";
-import {WIDGET_TYPES} from "../../../services/widget-type.service";
+import {WidgetTypeService, WIDGET_TYPES} from "../../../services/widget-type.service";
 import {EditorService, IWidgetListItem} from "../../../services/editor.service";
 import {InputComponent} from "../../ui/input/input/input.component";
 import {FormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 
 import {SidebarActionsComponent} from "../../ui/sidebar-actions/sidebar-actions.component";
-import {IWidgetDesc} from "../../../services/dsw.types";
+import {IWidgetDesc, IWidgetType} from "../../../services/dsw.types";
 import {isHtmlViewerType} from "../../../services/html-viewer.util";
 
 @Component({
@@ -54,16 +54,17 @@ export class TypeAndDatasourceComponent implements OnInit {
     WIDGET_TYPES.map,
     WIDGET_TYPES.htmlViewer,
   ];
-  type: any;
+  type?: IWidgetType;
 
   constructor(private ms: ModalService,
               private eds: EditorService,
-              private ds: DashboardService) {
+              private ds: DashboardService,
+              private wts: WidgetTypeService) {
   }
 
   ngOnInit() {
     this.widgetList = this.eds.getWidgetsList([this.model?.name ?? '']);
-    this.type = WIDGET_TYPES[this.model?.type?.toLowerCase() ?? ''];
+    this.type = this.wts.getWidgetSelection(this.model);
   }
 
   onSelectDataSource() {
@@ -92,7 +93,7 @@ export class TypeAndDatasourceComponent implements OnInit {
     if (!this.model) {
       return;
     }
-    this.model.type = Object.entries(WIDGET_TYPES).find(el => el[1] === this.type)?.[0] || '';
+    this.wts.applyWidgetSelection(this.model, this.type);
     this.eds.updateEditedWidget({widget: this.model, reCreate: true});
   }
 
@@ -124,6 +125,6 @@ export class TypeAndDatasourceComponent implements OnInit {
   }
 
   isHtmlViewerSelected(): boolean {
-    return isHtmlViewerType(this.model?.type);
+    return isHtmlViewerType(this.wts.getWidgetTypeName(this.model));
   }
 }
