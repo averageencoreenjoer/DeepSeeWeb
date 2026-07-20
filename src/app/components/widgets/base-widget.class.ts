@@ -1978,6 +1978,11 @@ export class BaseWidget implements OnInit, OnDestroy {
       }
     } else {
       this.subLinkedMdx = this.bs.subscribe('setLinkedMDX:' + this.widget.name, (mdx: string) => this.onSetLinkedMdx(mdx));
+      // When setting link for edited widget, refresh target
+      // to be sure that edited widget will receive mdx
+      /* if (this.widget.edKey) {
+           this.bs.broadcast('refresh:' + this.widget.dataLink);
+       }*/
     }
   }
 
