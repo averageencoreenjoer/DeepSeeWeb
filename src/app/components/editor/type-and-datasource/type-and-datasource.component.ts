@@ -1,16 +1,15 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {ModalService} from "../../../services/modal.service";
 import {IDataSourceInfo} from "../datasource-selector-dialog/datasource-selector-dialog";
 import {DashboardService} from "../../../services/dashboard.service";
-import {WidgetTypeService, WIDGET_TYPES} from "../../../services/widget-type.service";
+import {WIDGET_TYPES} from "../../../services/widget-type.service";
 import {EditorService, IWidgetListItem} from "../../../services/editor.service";
 import {InputComponent} from "../../ui/input/input/input.component";
 import {FormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 
 import {SidebarActionsComponent} from "../../ui/sidebar-actions/sidebar-actions.component";
-import {IWidgetDesc, IWidgetType} from "../../../services/dsw.types";
-import {isHtmlViewerType} from "../../../services/html-viewer.util";
+import {IWidgetDesc} from "../../../services/dsw.types";
 
 @Component({
   selector: 'dsw-type-and-ds',
@@ -24,7 +23,7 @@ import {isHtmlViewerType} from "../../../services/html-viewer.util";
     InputComponent
   ],
 })
-export class TypeAndDatasourceComponent implements OnInit {
+export class TypeAndDatasourceComponent implements OnInit, OnDestroy {
   @Input() model?: IWidgetDesc;
   @Input() invalid: string[] = [];
   widgetList: IWidgetListItem[] = [];
@@ -52,19 +51,17 @@ export class TypeAndDatasourceComponent implements OnInit {
     WIDGET_TYPES.regular,
     WIDGET_TYPES.textMeter,
     WIDGET_TYPES.map,
-    WIDGET_TYPES.htmlViewer,
   ];
-  type?: IWidgetType;
+  type: any;
 
   constructor(private ms: ModalService,
               private eds: EditorService,
-              private ds: DashboardService,
-              private wts: WidgetTypeService) {
+              private ds: DashboardService) {
   }
 
   ngOnInit() {
     this.widgetList = this.eds.getWidgetsList([this.model?.name ?? '']);
-    this.type = this.wts.getWidgetSelection(this.model);
+    this.type = WIDGET_TYPES[this.model?.type?.toLowerCase() ?? ''];
   }
 
   onSelectDataSource() {
@@ -89,11 +86,15 @@ export class TypeAndDatasourceComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.eds.cancelEditing();
+  }
+
   onTypeChange() {
     if (!this.model) {
       return;
     }
-    this.wts.applyWidgetSelection(this.model, this.type);
+    this.model.type = Object.entries(WIDGET_TYPES).find(el => el[1] === this.type)?.[0] || '';
     this.eds.updateEditedWidget({widget: this.model, reCreate: true});
   }
 
@@ -122,9 +123,5 @@ export class TypeAndDatasourceComponent implements OnInit {
       return;
     }
     this.eds.save(this.model);
-  }
-
-  isHtmlViewerSelected(): boolean {
-    return isHtmlViewerType(this.wts.getWidgetTypeName(this.model));
   }
 }

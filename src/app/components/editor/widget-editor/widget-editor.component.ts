@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {MenuService} from "../../../services/menu.service";
 import {SidebarService} from "../../../services/sidebar.service";
 import {DashboardService} from "../../../services/dashboard.service";
 import {dsw} from "../../../../environments/dsw";
 import {EditorService} from "../../../services/editor.service";
+import {ModalService} from "../../../services/modal.service";
 
 import {FormsModule} from "@angular/forms";
 import {InputComponent} from "../../ui/input/input/input.component";
@@ -17,7 +19,7 @@ import {IWidgetDesc} from "../../../services/dsw.types";
   standalone: true,
   imports: [SidebarActionsComponent, InputComponent, FormsModule]
 })
-export class WidgetEditorComponent implements OnInit {
+export class WidgetEditorComponent implements OnInit, OnDestroy {
   @Input() widget?: IWidgetDesc;
   @Input() invalid: string[] = [];
   model: Partial<IWidgetDesc> = {
@@ -35,7 +37,6 @@ export class WidgetEditorComponent implements OnInit {
     dependents: [],
     controls: [],
     mdx: '',
-    properties: {} as any,
 
     // Gridster
     x: 0,
@@ -44,8 +45,10 @@ export class WidgetEditorComponent implements OnInit {
     cols: 4
   };
 
-  constructor(private dbs: DashboardService,
+  constructor(private ms: MenuService,
+              private dbs: DashboardService,
               private eds: EditorService,
+              private mds: ModalService,
               private sbs: SidebarService) {
   }
 
@@ -62,9 +65,26 @@ export class WidgetEditorComponent implements OnInit {
     }
   }
 
-  onCancelEditing() {
+  ngOnDestroy() {
     this.eds.cancelEditing();
+  }
+
+  onCancelEditing() {
+
+    /*if (this.eds.onUnsavedChanged.value) {
+        this.mds.show({
+            message: 'You have unsaved changes. Cancel editing?',
+            buttons: [
+                { label: 'Yes', autoClose: true, click: () => {
+                        this.close();
+                }},
+                {label: 'No', autoClose: true}
+            ]
+        });
+    } else {*/
     this.close();
+    //}
+
   }
 
   onSave() {
@@ -73,16 +93,6 @@ export class WidgetEditorComponent implements OnInit {
 
   onTypeAndDataSourceClick() {
     this.eds.navigateDataSourceAndType(this.model);
-  }
-
-  onWidgetSettingsClick() {
-    this.sbs.showComponent({
-      component: import('./../widget-settings/widget-settings.component'),
-      single: true,
-      inputs: {
-        model: this.model
-      }
-    });
   }
 
   updateWidget() {

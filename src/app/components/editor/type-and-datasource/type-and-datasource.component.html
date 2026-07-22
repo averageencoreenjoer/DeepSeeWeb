@@ -18,22 +18,16 @@
       [closeOnSelect]="true"
       (change)="onTypeChange()"
     ></ng-select>
-    @if (!isHtmlViewerSelected()) {
-      <label>Data source</label>
-      <dsw-input
-        [required]="invalid.includes('datasource')"
-        [(ngModel)]="model.dataSource"
-        [chooseButton]="true"
-        (keydown.enter)="onDatasourceChanged()"
-        (choose)="onSelectDataSource()"
-      ></dsw-input>
-    } @else {
-      <div class="field-note">
-        HTML web view does not use an MDX data source. Use Widget settings -> Data for direct
-        HTML/URL, or configure Reference to for linked payloads from a pivot widget.
-      </div>
-    }
-
+    <!-- Data source -->
+    <label>Data source</label>
+    <dsw-input
+      [required]="invalid.includes('datasource')"
+      [(ngModel)]="model.dataSource"
+      [chooseButton]="true"
+      (keydown.enter)="onDatasourceChanged()"
+      (choose)="onSelectDataSource()"
+    ></dsw-input>
+    <!-- Reference to -->
     <label>Reference to</label>
     <ng-select
       class="dsw"
