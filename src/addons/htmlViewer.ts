@@ -26,7 +26,15 @@ import {buildHtmlViewerMarkup} from '../app/services/html-viewer.util';
 })
 export class HtmlViewer extends BaseWidget implements OnInit, DoCheck, OnDestroy {
   static AddonInfo: IAddonInfo = {
+    // Version of addon system, should be specified manually as number, not reference
+    // version always should be equal to BaseWidget.CURRENT_ADDON_VERSION
+    // used to compare unsupported addons when breaking changes are made into BaseWidget
+    // Note: do not use reference to BaseWidget.CURRENT_ADDON_VERSIO here!
+    // specify number MANUALLY
     version: 1,
+    // Widget type
+    // 'custom' for all non-standard widgets
+    // 'chart' for highcharts widget
     type: 'custom'
   };
   isSpinner = false;

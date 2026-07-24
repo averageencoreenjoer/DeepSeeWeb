@@ -16,7 +16,15 @@ let HtmlViewer = class HtmlViewer extends base_widget_class_1.BaseWidget {
         this.currentWidgetData = '';
     }
     static { this.AddonInfo = {
+        // Version of addon system, should be specified manually as number, not reference
+        // version always should be equal to BaseWidget.CURRENT_ADDON_VERSION
+        // used to compare unsupported addons when breaking changes are made into BaseWidget
+        // Note: do not use reference to BaseWidget.CURRENT_ADDON_VERSIO here!
+        // specify number MANUALLY
         version: 1,
+        // Widget type
+        // 'custom' for all non-standard widgets
+        // 'chart' for highcharts widget
         type: 'custom'
     }; }
     ngOnInit() {
